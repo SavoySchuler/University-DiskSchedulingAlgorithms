@@ -3,17 +3,15 @@ using namespace std;
 
 int c_look(vector<int> request_queue, int head)
 {
+    /// Initialize iterator variable.
     int i = 0;
 
+    /// Start head movement count at 0.
     int head_movement = 0;
-
-    bool direction = 0;
     
     bool bounce = false;  
 
     int largest = 0, largest_under_head = 0, smallest = 201;   
-
-    int Disk_Size = 200;
 
     for (i = 0; i < request_queue.size(); i++)
     {

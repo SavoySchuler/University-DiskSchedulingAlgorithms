@@ -13,8 +13,6 @@ int look(vector<int> request_queue, int head)
 
     int largest = 0, smallest;   
 
-    int Disk_Size = 200;
-
     for (i = 0; i < request_queue.size(); i++)
     {
         if (request_queue[i] < head)

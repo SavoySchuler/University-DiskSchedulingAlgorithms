@@ -15,7 +15,7 @@
 /// Include library for vectors.
 #include <vector>
 
-/// Include libraries for use of rand. 
+/// Include libraries for use of rand and absolute value. 
 #include <stdlib.h>
 #include <time.h>
 

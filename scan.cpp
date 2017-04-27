@@ -1,3 +1,5 @@
+#include "disk.h"
+
 #include <vector>
 using namespace std;
 
@@ -12,8 +14,6 @@ int scan(vector<int> request_queue, int head)
     bool bounce = false;  
 
     int largest = 0, smallest;   
-
-    int Disk_Size = 200;
 
     for (i = 0; i < request_queue.size(); i++)
     {
@@ -31,7 +31,7 @@ int scan(vector<int> request_queue, int head)
 
     if (bounce = true)
     {
-        head_movement = head - smallest + 2*(Disk_Size - 1 - head);
+        head_movement = head - smallest + 2*(DISK_SIZE - 1 - head);
     }
     
     else
@@ -41,4 +41,5 @@ int scan(vector<int> request_queue, int head)
     
     return head_movement;
 }
+
 

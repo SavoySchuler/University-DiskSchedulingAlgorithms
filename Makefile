@@ -4,9 +4,6 @@ CPP = g++
 # Preprocessor and compiler flags
 CXXFLAGS = $(CFLAGS) -std=c++11
 
-#OBJECT FILES
-OBJS = test.o pid.o
-
 # Targets
 TARGET = disk_sched
 

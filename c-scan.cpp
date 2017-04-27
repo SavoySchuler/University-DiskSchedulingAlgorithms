@@ -1,5 +1,3 @@
-#include "disk.h"
-
 #include <stdlib.h>
 #include <vector>
 
@@ -9,7 +7,7 @@ using namespace std;
 
 #include <iostream>
 
-int c_scan(vector<int> request_queue, vector<int> batch_sizes, int head)
+int c_scan(vector<int> request_queue, int head)
 {
     int i = 0;
 
@@ -20,6 +18,8 @@ int c_scan(vector<int> request_queue, vector<int> batch_sizes, int head)
     bool bounce = false;  
 
     int largest = 0, largest_under_head = 0;   
+
+    int Disk_Size = 200;
 
     for (i = 0; i < request_queue.size(); i++)
     {
@@ -37,7 +37,7 @@ int c_scan(vector<int> request_queue, vector<int> batch_sizes, int head)
 
     if (bounce = true)
     {
-        head_movement = (DISK_SIZE - 1 - head) + largest_under_head;
+        head_movement = (Disk_Size - 1 - head) + largest_under_head;
     }
     
     else

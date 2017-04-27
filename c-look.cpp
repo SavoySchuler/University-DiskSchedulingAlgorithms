@@ -1,7 +1,7 @@
 #include <vector>
 using namespace std;
 
-int c_look(vector<int> request_queue, vector<int> batch_sizes, int head)
+int c_look(vector<int> request_queue, int head)
 {
     int i = 0;
 
@@ -12,6 +12,8 @@ int c_look(vector<int> request_queue, vector<int> batch_sizes, int head)
     bool bounce = false;  
 
     int largest = 0, largest_under_head = 0, smallest = 201;   
+
+    int Disk_Size = 200;
 
     for (i = 0; i < request_queue.size(); i++)
     {

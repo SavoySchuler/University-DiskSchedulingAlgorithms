@@ -17,7 +17,8 @@ using namespace std;
 
 /**
 This function is used to simulate a shortest-seek-time-first disk scheduling 
-algorithm. The function takes as arguments the starting location of the disk 
+algorithm by serving the cylinder request closet to the current position of the 
+disk head. The function takes as arguments the starting location of the disk 
 head and a queue of requests. After performing the disk scheduling algorithm on 
 all requests in the queue, the function will return the sum of movements of the 
 disk head. 

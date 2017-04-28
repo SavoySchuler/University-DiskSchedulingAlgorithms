@@ -28,13 +28,8 @@ the queue, the function will return the sum of movements of the disk head.
 int look(vector<int> request_queue, int head)
 {
     int i = 0;
-
     int head_movement = 0;
-
-    bool direction = 0;
-    
     bool bounce = false;  
-
     int largest = 0, smallest;   
 
     for (i = 0; i < request_queue.size(); i++)
@@ -46,20 +41,14 @@ int look(vector<int> request_queue, int head)
         }
 
         else if (request_queue[i] > largest)    
-        {
             largest = request_queue[i];
-        }
     }
 
     if (bounce = true)
-    {
         head_movement = head - smallest + 2*(largest - head);
-    }
     
     else
-    {
         head_movement = largest - head;
-    }
     
     return head_movement;
 }

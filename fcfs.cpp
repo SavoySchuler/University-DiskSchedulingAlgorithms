@@ -20,9 +20,10 @@ using namespace std;
 
 /**
 This function is used to simulate a first-come, first-served disk scheduling 
-algorithm. The function takes as arguments the starting location of the disk 
-head and a queue of requests. After performing the disk scheduling algorithm on 
-all requests in the queue, the function will return the sum of movements of the 
+algorithm by serving random cylinder requests in the order that they arrive. 
+The function takes as arguments the starting location of the disk head and a 
+queue of requests. After performing the disk scheduling algorithm on all 
+requests in the queue, the function will return the sum of movements of the 
 disk head. 
 
 @param[in] request_queue    Vector of ints representing cylinder request queue.

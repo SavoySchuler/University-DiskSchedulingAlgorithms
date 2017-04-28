@@ -175,13 +175,14 @@ int main( int argc, char *argv[])
 
     cout << "SSTF: " << sstf(request_queue_sstf, head) << "\n\n";
     
-    cout << "SCAN: " << scan(request_queue_scan, head) << "\n\n";
+    /// + used to indicate direction of scan/look is moving up the disk.
+    cout << "SCAN: " << scan(request_queue_scan, head) << " +\n\n";
 
-    cout << "C-SCAN: " << c_scan(request_queue_c_scan, head) << "\n\n";
+    cout << "C-SCAN: " << c_scan(request_queue_c_scan, head) << " +\n\n";
 
-    cout << "LOOK: " <<  look(request_queue_look, head) << "\n\n";
+    cout << "LOOK: " <<  look(request_queue_look, head) << " +\n\n";
 
-    cout << "C-LOOK: " << c_look(request_queue_c_look, head) << "\n\n";
+    cout << "C-LOOK: " << c_look(request_queue_c_look, head) << " +\n\n";
 
     /// Exit normally.
     return 0;

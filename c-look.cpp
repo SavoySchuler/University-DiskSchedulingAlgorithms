@@ -12,10 +12,6 @@ head movement with a circular-look disk scheduling algorithm.
 /// Include library for vector use. 
 #include <vector>
 
-/// Include libraries for use of rand.
-#include <stdlib.h>
-#include <time.h>
-
 /// Using standard namespace.
 using namespace std;
 
@@ -28,10 +24,11 @@ of requests. After performing the disk scheduling algorithm on all requests in
 the queue, the function will return the sum of movements of the disk head. 
 
 @param[in] request_queue    Vector of ints representing cylinder request queue.
+@param[in] arrival_times    Vector of ints representing request arrival times.
 @param[in] head             Int representing starting location of disk head. 
 @return head_movement       Int summing algorithm's total head movement. 
 */
-int c_look(vector<int> request_queue, int head)
+int c_look(vector<int> request_queue, vector<int> arrival_times, int head)
 {
     /// Initialize iterator variable.
     int i = 0;
@@ -48,11 +45,8 @@ int c_look(vector<int> request_queue, int head)
     /// Index of next request in request_queue to be added to request array.
     int request_up = 0;
 
-    /// Seed rand.
-    srand(time(NULL));
-
-    /// Add request to request array at random time intervals (steps) mod 5.
-    int request_arriving_at = rand()%5;
+    /// Variable for adding request to request array at random times.
+    int request_arriving_at = 0;
 
     /// Add counter for checking to see if request should be delivered. 
     int request_arriving_count = -1;
@@ -158,8 +152,8 @@ int c_look(vector<int> request_queue, int head)
             /// Mark next request for delivery.
             request_up++;
 
-            /// Generate random time for new request to arrive.            
-            request_arriving_at = rand()%5;
+            /// Get random time for new request to arrive.            
+            request_arriving_at = arrival_times[request_up];
 
             /// Set request arrival count back;
             request_arriving_count = -1;

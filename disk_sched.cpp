@@ -90,6 +90,35 @@ vector<int> populate_request_queue()
 }
 
 /**
+This function is used to generate random arrival times for every cylinder 
+request.
+
+@return request_arrivals   A vector containing 1,000 randomly generated request 
+                        arrival times.
+*/
+vector<int> generate_request_arrival_schedule()
+{
+    /// Initialize iterator variable.
+    int i = 0;
+
+    /// Initialize temporary queue for holding request arrival times.
+    vector<int> request_arrivals;
+
+    /// Seed rand.
+    srand(time(NULL));
+
+    /// For each request...
+    for (i = 0; i < NUM_REQUESTS; i++)
+    {
+        /// Generate a random arrival time.    
+        request_arrivals.push_back(rand()%5);
+    }
+
+    /// Return vector of arrival times.
+    return request_arrivals;
+}
+
+/**
 This is the main function of the program. It will check for proper command line 
 parameters, set the starting location of the disk head to that indicated by the 
 user input. It will then call a function to generate 1,000 random cylinder 
@@ -145,13 +174,18 @@ int main( int argc, char *argv[])
     vector<int> request_queue_look (request_queue_fcfs); 
     vector<int> request_queue_c_look (request_queue_fcfs); 
 
-    /// Ensure all request queues have been properly initialized. 
+    /// Generate a vector of random arrival times for each request.
+    vector<int> arrival_times = generate_request_arrival_schedule();
+
+    /** Ensure all request queues and arrival times have been properly 
+    initialized.*/
     if ( request_queue_fcfs.size() != NUM_REQUESTS 
         || request_queue_sstf.size() != NUM_REQUESTS 
         || request_queue_scan.size() != NUM_REQUESTS 
         || request_queue_c_scan.size() != NUM_REQUESTS 
         || request_queue_look.size() != NUM_REQUESTS 
-        || request_queue_c_look.size() != NUM_REQUESTS )
+        || request_queue_c_look.size() != NUM_REQUESTS 
+        || arrival_times.size() != NUM_REQUESTS )
     {
         /// If not, inform the user.
         cout << "\nFailed to populate request queues. Exiting.\n\n";
@@ -168,21 +202,21 @@ int main( int argc, char *argv[])
         "HEAD MOVEMENT REQUIRED PER ALGORITHM:\n\n";
 
     /** 
-    Call each algorithm simulation on the same random requests and output
-    total head movement for each.
+    Call each algorithm simulation on the same random requests and request 
+    arrival times. Output total head movement for each.
     */ 
     cout << "FCFS: " << fcfs(request_queue_fcfs, head) << "\n\n";
 
     cout << "SSTF: " << sstf(request_queue_sstf, head) << "\n\n";
     
-    /// + used to indicate direction of scan/look is moving up the disk.
-    cout << "SCAN: " << scan(request_queue_scan, head) << " +\n\n";
+    /// + used to indicate scan/look is moving up the disk to start.
+    cout << "SCAN: " << scan(request_queue_scan, arrival_times, head) << " +\n\n";
 
-    cout << "C-SCAN: " << c_scan(request_queue_c_scan, head) << " +\n\n";
+    cout << "C-SCAN: " << c_scan(request_queue_c_scan, arrival_times, head) << " +\n\n";
 
-    cout << "LOOK: " <<  look(request_queue_look, head) << " +\n\n";
+    cout << "LOOK: " <<  look(request_queue_look, arrival_times, head) << " +\n\n";
 
-    cout << "C-LOOK: " << c_look(request_queue_c_look, head) << " +\n\n";
+    cout << "C-LOOK: " << c_look(request_queue_c_look, arrival_times, head) << " +\n\n";
 
     /// Exit normally.
     return 0;

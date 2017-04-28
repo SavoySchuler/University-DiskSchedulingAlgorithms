@@ -85,7 +85,8 @@ int c_scan(vector<int> request_queue, int head)
         request_arriving_count++;   
 
         /// Add request to queue at their arrival time while requests remain.
-        if (request_arriving_count >= request_arriving_at && request_up <= request_queue.size())
+        if (request_arriving_count >= request_arriving_at && request_up <= 
+            request_queue.size())
         {
             /** If a request already exists at that cyclinder, decrement 
             remaining requests by one as all requests for the cylinder will be 

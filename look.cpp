@@ -12,14 +12,20 @@ head movement with a look disk scheduling algorithm.
 /// Include library for vector use. 
 #include <vector>
 
+/// Include libraries for use of rand.
+#include <stdlib.h>
+#include <time.h>
+
 /// Using standard namespace.
 using namespace std;
 
 /**
-This function is used to simulate a look disk scheduling algorithm. The 
-function takes as arguments the starting location of the disk head and a queue 
-of requests. After performing the disk scheduling algorithm on all requests in 
-the queue, the function will return the sum of movements of the disk head. 
+This function is used to simulate a look disk scheduling algorithm which scans 
+the disk up and down for requests, changing direction every time a cylinder with 
+the largest or smallest outstanding request is reached. The function takes as 
+arguments the starting location of the disk head and a queue of requests. After 
+performing the disk scheduling algorithm on all requests in the queue, the 
+function will return the sum of movements of the disk head. 
 
 @param[in] request_queue    Vector of ints representing cylinder request queue.
 @param[in] head             Int representing starting location of disk head. 
@@ -27,29 +33,149 @@ the queue, the function will return the sum of movements of the disk head.
 */
 int look(vector<int> request_queue, int head)
 {
+    /// Initialize iterator variable.
     int i = 0;
+
+    /// Initialize variable for counting total disk head movement.
     int head_movement = 0;
-    bool bounce = false;  
-    int largest = 0, smallest;   
 
-    for (i = 0; i < request_queue.size(); i++)
+    /// Store number of requests in simulation waiting to be served.
+    int requests_remaining = request_queue.size()-1;
+
+    /// Initialize request array filled with zeros.
+    int request_array [DISK_SIZE] = {};
+
+    /// Index of next request in request_queue to be added to request array.
+    int request_up = 0;
+
+    /// Mark direction of head movement. True == up, false == down. 
+    bool direction = true; 
+    
+    /// Seed rand.
+    srand(time(NULL));
+
+    /// Add request to request array at random time intervals (steps) mod 5.
+    int request_arriving_at = rand()%5;
+
+    /// Add counter for checking to see if request should be delivered. 
+    int request_arriving_count = -1;
+
+    /// Keep track of largest request cylinder as turning point. 
+    int smallest_requested_cylinder = DISK_SIZE;
+
+    /// Keep track of smallest request cylinder as turning point. 
+    int largest_requested_cylinder = -1;
+ 
+    /// Run scan while requests remain in simulation. 
+    while(requests_remaining > 0)
     {
-        if (request_queue[i] < head)
-        {
-            bounce = true;
-            smallest = request_queue[i];
-        }
+        /// If the disk head is over a requested cylinder...
+        if (request_array[head] != 0)
+        {   
+            /// Serve the request.
+            request_array[head] = 0;
+            
+            /// Decrement the number of requests remaining in the simulation.
+            requests_remaining--;
 
-        else if (request_queue[i] > largest)    
-            largest = request_queue[i];
+            /// Pass a unit of time while a request is served.
+            request_arriving_count++;  
+
+            /// If the request was at the largest cylinder with a request...
+            if(head == largest_requested_cylinder)
+            {
+                /// Search for the next largest cylinder request.
+                for (i = 0; i < DISK_SIZE; i++)
+                {
+                    /// If a cylinder has a request waiting...
+                    if (request_array[i] == 1)
+                    {
+                        /// Store its index in largest_requested_cylinder.
+                        largest_requested_cylinder = i;
+                    }
+                }   
+            }
+
+            /// If the request was at the smallest cylinder with a request...
+            if(head == smallest_requested_cylinder)
+            {
+                /// Search for the first (smallest) cylinder request.
+                for (i = 0; i < DISK_SIZE; i++)
+                {
+                    /// If a cylinder has a request waiting...
+                    if (request_array[i] == 1)
+                    {
+                        /// Store its index in smallest_requested_cylinder.
+                        smallest_requested_cylinder = i;
+    
+                        /// And break.
+                        break;
+                    }
+                } 
+            }               
+        }            
+
+        /** If largest request cylinder is reached, change direction downward.
+        Bound by disk size for security.*/
+        if(head >= DISK_SIZE-1  || head >= largest_requested_cylinder)
+            direction = false;
+
+        /** If smallest request cylinder is reached, change direction upward.
+        Bound by disk size for security.*/
+        else if ( head <= 0 || head <= smallest_requested_cylinder)
+            direction = true;
+        
+        /// If direction is up, step the disk head up.
+        if (direction)
+            head++;
+
+        /// If direction is down, step the disk head down.        
+        else 
+            head--;
+
+        /// Keep count of total disk head movement in simulation.
+        head_movement++;
+    
+        /// Pass a unit of time every time the disk head moves.
+        request_arriving_count++;   
+
+        /// Add request to queue at their arrival time while requests remain.
+        if (request_arriving_count >= request_arriving_at && request_up <= 
+            request_queue.size())
+        {
+            /** If a request already exists at that cyclinder, decrement 
+            remaining requests by one as all requests for the cylinder will be 
+            served at the same time.*/
+            if ( request_array[request_queue[request_up]] == 1 )
+                requests_remaining--;
+
+            /// Else...
+            else
+            {
+                /// Mark a request at that cylinder.
+                request_array[request_queue[request_up]] = 1;
+
+                /// Update smallest request index if new request is smaller.
+                if (request_queue[request_up] < smallest_requested_cylinder)
+                    smallest_requested_cylinder = request_queue[request_up]; 
+
+                /// Update largest request index if new request is larger.
+                if (request_queue[request_up] > largest_requested_cylinder)
+                    largest_requested_cylinder = request_queue[request_up];
+            }
+
+            /// Mark next request for delivery.
+            request_up++;
+
+            /// Generate random time for new request to arrive.            
+            request_arriving_at = rand()%5;
+
+            /// Set request arrival count back;
+            request_arriving_count = -1;
+        }
     }
 
-    if (bounce = true)
-        head_movement = head - smallest + 2*(largest - head);
-    
-    else
-        head_movement = largest - head;
-    
+    /// Return count of total disk head movement. 
     return head_movement;
 }
 

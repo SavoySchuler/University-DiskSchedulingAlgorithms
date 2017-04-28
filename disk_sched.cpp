@@ -1,3 +1,38 @@
+/**
+@file disk_sched.cpp
+
+@brief 
+
+    Program Description:
+    
+        This program provides a simulation of FCFS, SSTF, SCAN, C-SCAN, LOOK, 
+        and C-LOOK disk-scheduling algorithms performed on a disk with 5,000 
+        cylinders numbered 0 to 4,999 and servicing the same 1,000 randomly 
+        generated cylinder requests by each algorithm. The program is passed the
+        initial position of the disk head as a commadn line parameter from the 
+        user and reports the total disk head movement required by each 
+        algorithm.
+
+    File Description:
+    
+        This file contains the program main and a function used to generate
+        1,000 random cylinder requests.
+
+    Class: CSC 456 Operating Systems
+
+    Instructor: Dr. Chrsiter Karlsson
+
+    Compilation Instructions: make
+
+    Run Instructions: ./disk_sched <int> 
+
+        Where <int> is the starting position of the disk head.
+
+@author Savoy Schuler
+
+@Date 04/28/2017     
+*/
+
 /// Include program .h for disk size and num request defines.
 #include "disk.h"
 
@@ -22,6 +57,13 @@
 /// Using standard namespace. 
 using namespace std;
 
+/**
+This function is used to generate 1,000 random cylinder requests and return them
+in a vector.
+
+@return request_queue   A vector containing 1,000 randomly generated cylinder 
+                        requests.
+*/
 vector<int> populate_request_queue()
 {
     /// Initialize iterator variable.
@@ -47,13 +89,25 @@ vector<int> populate_request_queue()
     return request_queue;
 }
 
+/**
+This is the main function of the program. It will check for proper command line 
+parameters, set the starting location of the disk head to that indicated by the 
+user input. It will then call a function to generate 1,000 random cylinder 
+requests and make a copy of this vector for each algorithm. It will then run 
+each algorithm, passing each its own copy of the request vector, and output the 
+total head movement needed for each algorithm to the terminal before returning 
+successfully.  
+
+@return 0 Indicates successful run of disk scheduling algorithm simulations.
+*/
 int main( int argc, char *argv[])
 {
     /// Check for proper number of command line parameters entered.
     if (argc != 2) 
     {
         /// If not, print usage to user.
-        cerr << "\nUsage: " << argv[0] << " <int>\n\n";
+        cerr << "\nUsage: " << argv[0] << " <int>\n"  
+            << "Where <int> is the starting location of the disk head.\n\n";
         
         /// Exit with error.
         exit(1);
@@ -61,6 +115,20 @@ int main( int argc, char *argv[])
 
     /// Convert user-entered starting head position to int.
     int head = atoi(argv[1]);
+
+    /// Make sure user did not set head passed total disk size.
+    if(head >= DISK_SIZE)
+    {
+        /// If so, set head at top of disk. 
+        head = DISK_SIZE - 1;
+    }
+
+    /// Make sure user did pass negative value for location of disk head.
+    else if(head < 0)
+    {
+        /// If so, set head to bottom of disk
+        head = 0;
+    }
 
     /** Create multiple copies of a randomly generated request queue so that 
         they can be passed into algorithm simulation functions and altered and 
@@ -119,11 +187,3 @@ int main( int argc, char *argv[])
     return 0;
 }
 
-/*
-    cout<<"\n\n";
-    for (int i = 0; i < NUM_REQUESTS; i++)
-    {
-        cout << request_queue4[i] << "\n"; 
-    }
-    cout<<"\n\n"; 
-*/
